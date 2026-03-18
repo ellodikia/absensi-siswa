@@ -21,32 +21,69 @@ if ($_SESSION['role'] != 'siswa') { header("Location: ../login.php"); exit; }
         <main class="p-6 flex flex-col items-center">
             <div class="w-full max-w-md bg-white p-6 rounded-3xl shadow-lg text-center">
                 <h2 class="text-2xl font-bold text-gray-800 mb-2">Arahkan Kamera</h2>
-                <p class="text-gray-500 mb-6 text-sm">Scan QR Code yang ditampilkan oleh Guru di depan kelas</p>
+                <p class="text-gray-500 mb-4 text-sm">Scan QR Code yang ditampilkan oleh Guru di depan kelas</p>
 
-                <div id="reader" class="overflow-hidden rounded-2xl border-4 border-indigo-100 mb-6"></div>
+                <div id="gps-status" class="mb-4 p-3 bg-yellow-50 rounded-lg text-sm font-semibold text-yellow-700 border border-yellow-200">
+                    <i class="fas fa-spinner fa-spin mr-2"></i> Mendeteksi lokasi GPS Anda...
+                </div>
 
-                <div id="result" class="hidden p-4 bg-yellow-100 text-yellow-800 rounded-lg animate-pulse">
-                    Memproses data...
+                <div id="reader" class="overflow-hidden rounded-2xl border-4 border-indigo-100 mb-6 relative z-10"></div>
+
+                <div id="result" class="hidden p-4 bg-green-100 text-green-800 rounded-lg font-bold animate-pulse">
+                    Memproses data kehadiran...
                 </div>
             </div>
         </main>
 
         <script>
+            let userLat = null;
+            let userLng = null;
+
+            // 1. Ambil Lokasi GPS Siswa
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        userLat = position.coords.latitude;
+                        userLng = position.coords.longitude;
+                        document.getElementById('gps-status').innerHTML = '<span class="text-green-700"><i class="fas fa-map-marker-alt mr-2"></i> Lokasi terdeteksi. Silakan scan QR.</span>';
+                        document.getElementById('gps-status').className = 'mb-4 p-3 bg-green-50 rounded-lg text-sm font-semibold border border-green-200';
+                    },
+                    function(error) {
+                        document.getElementById('gps-status').innerHTML = '<span class="text-red-700"><i class="fas fa-exclamation-triangle mr-2"></i> Gagal mendapatkan lokasi! Izinkan akses GPS di browser Anda.</span>';
+                        document.getElementById('gps-status').className = 'mb-4 p-3 bg-red-50 rounded-lg text-sm font-semibold border border-red-200';
+                    },
+                    { enableHighAccuracy: true } // Memaksa akurasi tinggi
+                );
+            } else {
+                document.getElementById('gps-status').innerHTML = '<span class="text-red-600">Browser tidak mendukung Geolocation.</span>';
+            }
+
+            // 2. Proses jika QR berhasil di-scan
             function onScanSuccess(decodedText, decodedResult) {
-                // decodedText berisi URL: https://.../siswa/proses_absen.php?token=xyz
+                // Cek apakah lokasi sudah didapatkan
+                if (userLat === null || userLng === null) {
+                    alert("Tunggu sebentar, lokasi Anda belum terdeteksi atau Anda belum mengizinkan akses lokasi (GPS)!");
+                    return; // Hentikan proses jika belum ada GPS
+                }
+
                 document.getElementById('result').classList.remove('hidden');
                 
                 // Matikan kamera setelah berhasil scan
                 html5QrcodeScanner.clear();
 
-                // Redirect ke link yang ada di QR Code
-                window.location.href = decodedText;
+                // Tambahkan data latitude dan longitude ke URL proses absen
+                // decodedText contoh: https://domain.com/siswa/proses_absen.php?token=xyz
+                let finalUrl = decodedText + "&lat=" + userLat + "&lng=" + userLng;
+                
+                // Redirect ke pemrosesan
+                window.location.href = finalUrl;
             }
 
             function onScanFailure(error) {
-                // Biarkan saja, dia akan terus mencoba scan
+                // Biarkan saja jika belum pas, dia akan terus mencoba scan
             }
 
+            // Inisialisasi Kamera
             let html5QrcodeScanner = new Html5QrcodeScanner(
                 "reader", { fps: 10, qrbox: {width: 250, height: 250} }
             );

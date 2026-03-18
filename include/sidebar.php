@@ -31,6 +31,9 @@
             <a href="laporan.php" class="flex items-center px-4 py-3 rounded-lg hover:bg-indigo-800 transition">
                 <i class="fas fa-file-invoice mr-3 text-indigo-400"></i> Laporan Absen
             </a>
+            <a href="laporan_bulanan.php" class="flex items-center px-4 py-3 rounded-lg hover:bg-indigo-800 transition">
+                <i class="fas fa-file-invoice mr-3 text-indigo-400"></i> Laporan Bulanan Absen
+            </a>
             <a href="absensi_manual.php" class="flex items-center px-4 py-3 rounded-lg hover:bg-indigo-800 transition">
                 <i class="fas fa-file-invoice mr-3 text-indigo-400"></i>Absen Manual
             </a>
