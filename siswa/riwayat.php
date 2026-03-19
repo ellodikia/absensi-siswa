@@ -1,97 +1,62 @@
 <?php
 include '../include/config.php';
+if ($_SESSION['role'] != 'siswa') { header("Location: ../login.php"); exit; }
 
-// Proteksi Halaman
-if ($_SESSION['role'] != 'siswa') { 
-    header("Location: ../login.php"); 
-    exit; 
-}
-
-// Ambil ID Siswa berdasarkan User ID yang login
 $user_id = $_SESSION['user_id'];
-$query_siswa = mysqli_query($conn, "SELECT id FROM siswa WHERE user_id = '$user_id'");
-$data_siswa = mysqli_fetch_assoc($query_siswa);
-$siswa_id = $data_siswa['id'];
+$siswa = mysqli_fetch_assoc(mysqli_query($conn, "SELECT id FROM siswa WHERE user_id = '$user_id'"));
+$siswa_id = $siswa['id'];
 
-// Ambil riwayat absen 30 hari terakhir
 $query_riwayat = "SELECT * FROM absensi WHERE siswa_id = '$siswa_id' ORDER BY tanggal DESC LIMIT 30";
 $result_riwayat = mysqli_query($conn, $query_riwayat);
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Riwayat Absensi - Siswa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Absensi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="bg-gray-50 flex">
-    
+<body class="bg-slate-50 flex">
     <?php include '../include/sidebar.php'; ?>
-
-    <div class="flex-1 md:ml-64 flex flex-col min-h-screen">
+    <div class="flex-1 md:ml-72 flex flex-col min-h-screen">
         <?php include '../include/header_nav.php'; ?>
+        <main class="p-4 md:p-8">
+            <h1 class="text-2xl font-black text-slate-800 mb-8 uppercase tracking-tight">Riwayat 30 Hari Terakhir</h1>
 
-        <main class="p-6">
-            <h1 class="text-2xl font-bold text-gray-800 mb-6"><i class="fas fa-history mr-2 text-indigo-600"></i>Riwayat Kehadiran (30 Hari Terakhir)</h1>
-
-            <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
+            <div class="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="bg-gray-100 text-gray-600 text-sm uppercase tracking-wider">
-                                <th class="px-6 py-4 font-semibold">Tanggal</th>
-                                <th class="px-6 py-4 font-semibold">Jam Scan</th>
-                                <th class="px-6 py-4 font-semibold">Status</th>
-                                <th class="px-6 py-4 font-semibold">Keterangan</th>
+                            <tr class="bg-slate-50 text-slate-400 text-[10px] uppercase font-black tracking-[0.2em] border-b border-slate-100">
+                                <th class="px-8 py-6">Tanggal</th>
+                                <th class="px-8 py-6">Jam Scan</th>
+                                <th class="px-8 py-6">Status</th>
+                                <th class="px-8 py-6">Keterangan</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-100">
-                            <?php 
-                            if(mysqli_num_rows($result_riwayat) > 0):
-                                while($row = mysqli_fetch_assoc($result_riwayat)): 
-                                    // Format tampilan status
-                                    $status = $row['status'];
-                                    $badge_color = '';
-                                    if($status == 'hadir') $badge_color = 'bg-green-100 text-green-700';
-                                    elseif($status == 'sakit') $badge_color = 'bg-yellow-100 text-yellow-700';
-                                    elseif($status == 'izin') $badge_color = 'bg-blue-100 text-blue-700';
-                                    else $badge_color = 'bg-red-100 text-red-700';
+                        <tbody class="divide-y divide-slate-50">
+                            <?php if(mysqli_num_rows($result_riwayat) > 0): while($row = mysqli_fetch_assoc($result_riwayat)): 
+                                $colors = ['hadir'=>'bg-emerald-50 text-emerald-600', 'sakit'=>'bg-amber-50 text-amber-600', 'izin'=>'bg-blue-50 text-blue-600', 'alpha'=>'bg-rose-50 text-rose-600'];
                             ?>
-                            <tr class="hover:bg-gray-50 transition">
-                                <td class="px-6 py-4 text-gray-800 font-medium">
-                                    <?= date('d M Y', strtotime($row['tanggal'])) ?>
+                            <tr class="hover:bg-slate-50/50 transition-colors">
+                                <td class="px-8 py-6 font-bold text-slate-700 text-sm"><?= date('d M Y', strtotime($row['tanggal'])) ?></td>
+                                <td class="px-8 py-6 font-black text-slate-800 tracking-tighter"><?= $row['jam_masuk'] != '00:00:00' ? $row['jam_masuk'] : '--:--' ?></td>
+                                <td class="px-8 py-6">
+                                    <span class="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border <?= $colors[$row['status']] ?>"><?= $row['status'] ?></span>
                                 </td>
-                                <td class="px-6 py-4 text-gray-600 font-mono">
-                                    <?= $row['jam_masuk'] != '00:00:00' ? $row['jam_masuk'] : '-' ?>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span class="px-3 py-1 rounded-full text-xs font-bold uppercase <?= $badge_color ?>">
-                                        <?= $status ?>
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 text-gray-500 text-sm">
-                                    <?= !empty($row['keterangan']) ? $row['keterangan'] : '-' ?>
-                                </td>
+                                <td class="px-8 py-6 text-slate-400 text-xs font-medium"><?= $row['keterangan'] ?: '-' ?></td>
                             </tr>
-                            <?php 
-                                endwhile; 
-                            else: 
-                            ?>
-                            <tr>
-                                <td colspan="4" class="px-6 py-8 text-center text-gray-500">
-                                    <i class="fas fa-folder-open text-3xl mb-3 text-gray-300 block"></i>
-                                    Belum ada data riwayat absensi.
-                                </td>
-                            </tr>
+                            <?php endwhile; else: ?>
+                            <tr><td colspan="4" class="px-8 py-20 text-center font-bold text-slate-300 uppercase tracking-widest text-xs">Belum ada riwayat</td></tr>
                             <?php endif; ?>
                         </tbody>
                     </table>
                 </div>
             </div>
         </main>
-
         <?php include '../include/footer.php'; ?>
     </div>
 </body>

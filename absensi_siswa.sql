@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 18, 2026 at 05:42 PM
+-- Generation Time: Mar 18, 2026 at 07:14 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -36,6 +36,13 @@ CREATE TABLE `absensi` (
   `keterangan` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `absensi`
+--
+
+INSERT INTO `absensi` (`id`, `siswa_id`, `tanggal`, `jam_masuk`, `status`, `keterangan`) VALUES
+(1, 1, '2026-03-18', '00:00:00', 'izin', '');
+
 -- --------------------------------------------------------
 
 --
@@ -65,11 +72,18 @@ INSERT INTO `guru` (`id`, `user_id`, `nama_guru`, `mapel`, `is_walikelas`) VALUE
 
 CREATE TABLE `siswa` (
   `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
   `nis` varchar(20) DEFAULT NULL,
   `nama_lengkap` varchar(100) DEFAULT NULL,
-  `kelas_jurusan` varchar(50) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL
+  `kelas_jurusan` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `siswa`
+--
+
+INSERT INTO `siswa` (`id`, `user_id`, `nis`, `nama_lengkap`, `kelas_jurusan`) VALUES
+(1, 3, '11111', ' Budi', 'XI RPL');
 
 -- --------------------------------------------------------
 
@@ -81,7 +95,7 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `username` varchar(50) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
-  `role` enum('admin','guru') NOT NULL
+  `role` enum('admin','guru','siswa') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -89,8 +103,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `role`) VALUES
-(1, 'admin', '12345', 'admin'),
-(2, '1122', '$2y$10$gFHqQUSFg3/lvEDNdskfv.0zz.KwFJHuyGftg8vp.oamRNv6Ijtwy', 'guru');
+(1, 'admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin'),
+(2, '1122', '$2y$10$gFHqQUSFg3/lvEDNdskfv.0zz.KwFJHuyGftg8vp.oamRNv6Ijtwy', 'guru'),
+(3, '11111', '$2y$10$zV1T6vT9eGyeA.e79S0z6O53OVa1ifNiwrlYiuosTQUUthDWScDQa', 'siswa');
 
 --
 -- Indexes for dumped tables
@@ -115,7 +130,8 @@ ALTER TABLE `guru`
 --
 ALTER TABLE `siswa`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `nis` (`nis`);
+  ADD UNIQUE KEY `nis` (`nis`),
+  ADD KEY `siswa_ibfk_2` (`user_id`);
 
 --
 -- Indexes for table `users`
@@ -132,7 +148,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `absensi`
 --
 ALTER TABLE `absensi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `guru`
@@ -144,13 +160,13 @@ ALTER TABLE `guru`
 -- AUTO_INCREMENT for table `siswa`
 --
 ALTER TABLE `siswa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
@@ -167,6 +183,12 @@ ALTER TABLE `absensi`
 --
 ALTER TABLE `guru`
   ADD CONSTRAINT `guru_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `siswa`
+--
+ALTER TABLE `siswa`
+  ADD CONSTRAINT `siswa_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

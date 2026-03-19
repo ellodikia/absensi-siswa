@@ -4,93 +4,72 @@ if ($_SESSION['role'] != 'siswa') { header("Location: ../login.php"); exit; }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Scan Absensi - Siswa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan Absensi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://unpkg.com/html5-qrcode"></script>
 </head>
-<body class="bg-gray-100 flex">
+<body class="bg-slate-50 flex">
     <?php include '../include/sidebar.php'; ?>
-
-    <div class="flex-1 md:ml-64 flex flex-col min-h-screen">
+    <div class="flex-1 md:ml-72 flex flex-col min-h-screen">
         <?php include '../include/header_nav.php'; ?>
 
-        <main class="p-6 flex flex-col items-center">
-            <div class="w-full max-w-md bg-white p-6 rounded-3xl shadow-lg text-center">
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">Arahkan Kamera</h2>
-                <p class="text-gray-500 mb-4 text-sm">Scan QR Code yang ditampilkan oleh Guru di depan kelas</p>
+        <main class="p-4 md:p-8 flex flex-col items-center">
+            <div class="w-full max-w-lg bg-white p-8 md:p-12 rounded-[2.5rem] shadow-sm border border-slate-100 text-center">
+                <h2 class="text-2xl font-black text-slate-800 mb-2 uppercase tracking-tight">Kamera Scan</h2>
+                <p class="text-slate-400 font-medium mb-8 text-sm leading-relaxed px-4">Arahkan kamera ke QR Code yang ada di layar proyektor depan kelas</p>
 
-                <div id="gps-status" class="mb-4 p-3 bg-yellow-50 rounded-lg text-sm font-semibold text-yellow-700 border border-yellow-200">
-                    <i class="fas fa-spinner fa-spin mr-2"></i> Mendeteksi lokasi GPS Anda...
+                <div id="gps-status" class="mb-8 p-5 bg-amber-50 rounded-2xl text-xs font-black uppercase tracking-widest text-amber-600 border border-amber-100 flex items-center justify-center gap-3">
+                    <i class="fas fa-location-arrow animate-bounce"></i> Mendeteksi GPS...
                 </div>
 
-                <div id="reader" class="overflow-hidden rounded-2xl border-4 border-indigo-100 mb-6 relative z-10"></div>
+                <div class="relative">
+                    <div id="reader" class="overflow-hidden rounded-[2rem] border-8 border-slate-50 shadow-inner relative z-10 aspect-square"></div>
+                    <div class="absolute inset-0 border-[20px] border-white/20 rounded-[2rem] z-20 pointer-events-none"></div>
+                </div>
 
-                <div id="result" class="hidden p-4 bg-green-100 text-green-800 rounded-lg font-bold animate-pulse">
-                    Memproses data kehadiran...
+                <div id="result" class="hidden mt-8 p-5 bg-emerald-50 text-emerald-600 rounded-2xl font-black text-xs uppercase tracking-[0.2em] animate-pulse border border-emerald-100">
+                    Memproses Kehadiran...
                 </div>
             </div>
         </main>
 
         <script>
-            let userLat = null;
-            let userLng = null;
+            let userLat = null, userLng = null;
 
-            // 1. Ambil Lokasi GPS Siswa
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     function(position) {
                         userLat = position.coords.latitude;
                         userLng = position.coords.longitude;
-                        document.getElementById('gps-status').innerHTML = '<span class="text-green-700"><i class="fas fa-map-marker-alt mr-2"></i> Lokasi terdeteksi. Silakan scan QR.</span>';
-                        document.getElementById('gps-status').className = 'mb-4 p-3 bg-green-50 rounded-lg text-sm font-semibold border border-green-200';
+                        const status = document.getElementById('gps-status');
+                        status.innerHTML = '<i class="fas fa-check-circle"></i> Lokasi Siap. Silakan Scan.';
+                        status.className = 'mb-8 p-5 bg-emerald-50 rounded-2xl text-xs font-black uppercase tracking-widest text-emerald-600 border border-emerald-100 flex items-center justify-center gap-3';
                     },
-                    function(error) {
-                        document.getElementById('gps-status').innerHTML = '<span class="text-red-700"><i class="fas fa-exclamation-triangle mr-2"></i> Gagal mendapatkan lokasi! Izinkan akses GPS di browser Anda.</span>';
-                        document.getElementById('gps-status').className = 'mb-4 p-3 bg-red-50 rounded-lg text-sm font-semibold border border-red-200';
+                    function() {
+                        alert("Gagal mendapatkan lokasi. Pastikan GPS aktif!");
                     },
-                    { enableHighAccuracy: true } // Memaksa akurasi tinggi
+                    { enableHighAccuracy: true }
                 );
-            } else {
-                document.getElementById('gps-status').innerHTML = '<span class="text-red-600">Browser tidak mendukung Geolocation.</span>';
             }
 
-            // 2. Proses jika QR berhasil di-scan
-            function onScanSuccess(decodedText, decodedResult) {
-                // Cek apakah lokasi sudah didapatkan
-                if (userLat === null || userLng === null) {
-                    alert("Tunggu sebentar, lokasi Anda belum terdeteksi atau Anda belum mengizinkan akses lokasi (GPS)!");
-                    return; // Hentikan proses jika belum ada GPS
+            function onScanSuccess(decodedText) {
+                if (!userLat || !userLng) {
+                    alert("Tunggu, GPS belum terdeteksi!");
+                    return;
                 }
-
                 document.getElementById('result').classList.remove('hidden');
-                
-                // Matikan kamera setelah berhasil scan
                 html5QrcodeScanner.clear();
-
-                // Tambahkan data latitude dan longitude ke URL proses absen
-                // decodedText contoh: https://domain.com/siswa/proses_absen.php?token=xyz
-                let finalUrl = decodedText + "&lat=" + userLat + "&lng=" + userLng;
-                
-                // Redirect ke pemrosesan
-                window.location.href = finalUrl;
+                window.location.href = decodedText + "&lat=" + userLat + "&lng=" + userLng;
             }
 
-            function onScanFailure(error) {
-                // Biarkan saja jika belum pas, dia akan terus mencoba scan
-            }
-
-            // Inisialisasi Kamera
-            let html5QrcodeScanner = new Html5QrcodeScanner(
-                "reader", { fps: 10, qrbox: {width: 250, height: 250} }
-            );
-            html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+            let html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: {width: 250, height: 250} });
+            html5QrcodeScanner.render(onScanSuccess);
         </script>
-
-        <?php include '../include/footer.php'; ?>
     </div>
 </body>
 </html>

@@ -1,11 +1,10 @@
 <?php
-// Set zona waktu ke WIB (Waktu Indonesia Barat)
 date_default_timezone_set('Asia/Jakarta');
 
 $host = "localhost";
 $user = "root";
 $pass = "";
-$db   = "absensi_siswa"; // Sesuai dengan DB yang kamu upload
+$db   = "absensi_siswa";
 
 $conn = mysqli_connect($host, $user, $pass, $db);
 
