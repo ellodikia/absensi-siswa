@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Jika user sudah login, arahkan langsung ke dashboard masing-masing
 if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
     $role = $_SESSION['role'];
     header("Location: $role/dashboard.php");
@@ -12,9 +11,10 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" href="img/logo.jpeg" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Absensi QR Code</title>
+    <title>Raksana Absensi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -34,12 +34,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                     <div class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
                         <i class="fas fa-qrcode text-white text-xl"></i>
                     </div>
-                    <span class="font-bold text-xl text-indigo-900 tracking-tight">QR-Absen</span>
-                </div>
-                <div>
-                    <a href="login.php" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-full font-semibold transition shadow-lg shadow-indigo-200">
-                        Masuk <i class="fas fa-arrow-right ml-2 text-sm"></i>
-                    </a>
+                    <span class="font-bold text-xl text-indigo-900 tracking-tight">RAbsen</span>
                 </div>
             </div>
         </div>
@@ -48,19 +43,15 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
     <main class="flex-1 flex items-center justify-center pt-20 pb-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-5xl mx-auto text-center">
             <div class="inline-block mb-4 px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 font-semibold text-sm">
-                <i class="fas fa-shield-alt mr-2"></i> Sistem Anti-Titip Absen Berbasis Token Dinamis
+                <i class="fas fa-shield-alt mr-2"></i> Sistem Absensi Digital.
             </div>
             
             <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 tracking-tight mb-6 leading-tight">
-                Absensi Sekolah Digital <br>
+                Absensi Digital <br>
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
-                    Cepat, Aman, & Modern
+                    Yayasan Pendidikan Raksana Medan
                 </span>
             </h1>
-            
-            <p class="mt-4 text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-10">
-                Tinggalkan absensi kertas manual. Gunakan teknologi QR Code dinamis yang berubah setiap 30 detik untuk memastikan kehadiran siswa secara real-time dan akurat.
-            </p>
             
             <div class="flex flex-col sm:flex-row justify-center gap-4">
                 <a href="login.php" class="bg-indigo-600 text-white font-bold text-lg px-8 py-4 rounded-xl hover:bg-indigo-700 transition shadow-xl shadow-indigo-200 flex items-center justify-center">
@@ -74,7 +65,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                         <i class="fas fa-user-shield"></i>
                     </div>
                     <h3 class="text-xl font-bold text-gray-800 mb-2">Panel Admin</h3>
-                    <p class="text-gray-600">Kelola master data guru, jurusan, dan konfigurasi sistem sekolah dengan mudah dan terpusat.</p>
+                    <p class="text-gray-600">Kelola master data guru, siswa, kelas/jurusan.</p>
                 </div>
 
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition">
@@ -96,11 +87,6 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
         </div>
     </main>
 
-    <footer class="bg-white border-t py-6 text-center mt-auto">
-        <p class="text-gray-500 font-medium text-sm">
-            &copy; <?php echo date("Y"); ?> Sistem Absensi QR Code. Dibangun untuk efisiensi pendidikan.
-        </p>
-    </footer>
-
+    <?php include 'include/footer.php'; ?> 
 </body>
 </html>

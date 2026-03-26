@@ -8,9 +8,6 @@
             <span class="text-xs font-black bg-indigo-50 text-indigo-600 px-4 py-2 rounded-lg uppercase tracking-widest border border-indigo-100">
                 <?= $_SESSION['role'] ?>
             </span>
-            <h2 class="text-slate-400 font-bold text-sm tracking-tight italic">
-                Pusat Kendali Sistem
-            </h2>
         </div>
     </div>
 

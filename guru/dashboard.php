@@ -14,6 +14,7 @@ $belum_absen = $total_siswa - ($hadir + $sakit + $izin);
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <link rel="icon" href="../img/logo.jpeg" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Guru</title>
@@ -40,8 +41,15 @@ $belum_absen = $total_siswa - ($hadir + $sakit + $izin);
                     <div class="bg-amber-100 w-12 h-12 rounded-2xl flex items-center justify-center text-amber-600 mb-4">
                         <i class="fas fa-envelope-open-text text-xl"></i>
                     </div>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Izin/Sakit</p>
-                    <h3 class="text-2xl font-black text-slate-800"><?= $sakit + $izin ?></h3>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Sakit</p>
+                    <h3 class="text-2xl font-black text-slate-800"><?= $sakit ?></h3>
+                </div>
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+                    <div class="bg-indigo-100 w-12 h-12 rounded-2xl flex items-center justify-center text-indigo-600 mb-4">
+                        <i class="fas fa-users text-xl"></i>
+                    </div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Izin</p>
+                    <h3 class="text-2xl font-black text-slate-800"><?= $izin ?></h3>
                 </div>
                 <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
                     <div class="bg-rose-100 w-12 h-12 rounded-2xl flex items-center justify-center text-rose-600 mb-4">
@@ -49,13 +57,6 @@ $belum_absen = $total_siswa - ($hadir + $sakit + $izin);
                     </div>
                     <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Alpa</p>
                     <h3 class="text-2xl font-black text-slate-800"><?= $belum_absen ?></h3>
-                </div>
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
-                    <div class="bg-indigo-100 w-12 h-12 rounded-2xl flex items-center justify-center text-indigo-600 mb-4">
-                        <i class="fas fa-users text-xl"></i>
-                    </div>
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest">Total</p>
-                    <h3 class="text-2xl font-black text-slate-800"><?= $total_siswa ?></h3>
                 </div>
             </div>
 
@@ -69,7 +70,7 @@ $belum_absen = $total_siswa - ($hadir + $sakit + $izin);
                 <div class="bg-indigo-600 p-8 rounded-3xl shadow-xl text-white flex flex-col justify-center relative overflow-hidden">
                     <div class="relative z-10">
                         <h2 class="text-2xl font-black mb-4 uppercase tracking-tight">Mulai Absensi</h2>
-                        <p class="text-indigo-100 mb-8 font-medium leading-relaxed">Tampilkan QR Code di layar kelas. Pastikan seluruh siswa dapat menjangkau kode tersebut.</p>
+                        <p class="text-indigo-100 mb-8 font-medium leading-relaxed">Tampilkan QR Code. Pastikan seluruh siswa dapat menjangkau kode tersebut.</p>
                         <a href="generate_qr.php" class="inline-block bg-white text-indigo-600 font-black py-4 px-8 rounded-2xl hover:bg-indigo-50 transition-all shadow-lg active:scale-95">
                             BUKA QR CODE <i class="fas fa-qrcode ml-2"></i>
                         </a>

@@ -10,6 +10,7 @@ $total_akun = mysqli_num_rows(mysqli_query($conn, "SELECT id FROM users"));
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <link rel="icon" href="../img/logo.jpeg" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Admin</title>
@@ -26,7 +27,6 @@ $total_akun = mysqli_num_rows(mysqli_query($conn, "SELECT id FROM users"));
             <div class="bg-slate-900 rounded-[2.5rem] p-10 text-white mb-8 shadow-2xl relative overflow-hidden">
                 <div class="relative z-10">
                     <h1 class="text-3xl font-black mb-2 tracking-tight uppercase">Administrator</h1>
-                    <p class="text-slate-400 font-medium">Selamat datang di pusat kendali master data sekolah.</p>
                 </div>
                 <div class="absolute top-0 right-0 p-8 opacity-10">
                     <i class="fas fa-shield-alt text-9xl"></i>
@@ -65,17 +65,6 @@ $total_akun = mysqli_num_rows(mysqli_query($conn, "SELECT id FROM users"));
                 </div>
             </div>
             
-            <div class="mt-10 bg-white p-10 rounded-[2.5rem] shadow-sm border border-slate-100">
-                <h3 class="text-lg font-black text-slate-800 mb-6 uppercase tracking-wider">Aksi Cepat</h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <a href="data_guru.php" class="bg-indigo-600 text-white p-6 rounded-2xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 text-center">
-                        <i class="fas fa-user-plus mr-2"></i> Tambah Data Guru
-                    </a>
-                    <a href="#" class="bg-slate-100 text-slate-700 p-6 rounded-2xl font-bold hover:bg-slate-200 transition-all text-center">
-                        <i class="fas fa-cog mr-2"></i> Pengaturan Sistem
-                    </a>
-                </div>
-            </div>
         </main>
 
         <?php include '../include/footer.php'; ?>

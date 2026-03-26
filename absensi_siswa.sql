@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 18, 2026 at 07:14 PM
+-- Generation Time: Mar 26, 2026 at 10:02 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -41,7 +41,18 @@ CREATE TABLE `absensi` (
 --
 
 INSERT INTO `absensi` (`id`, `siswa_id`, `tanggal`, `jam_masuk`, `status`, `keterangan`) VALUES
-(1, 1, '2026-03-18', '00:00:00', 'izin', '');
+(1, 1, '2026-03-18', '00:00:00', 'izin', ''),
+(2, 1, '2026-03-25', '00:00:00', 'sakit', ''),
+(3, 1, '2026-03-24', '07:00:00', 'hadir', 'Tepat waktu'),
+(4, 2, '2026-03-24', '07:15:00', 'hadir', ''),
+(5, 3, '2026-03-24', '00:00:00', 'alpha', 'Tanpa keterangan'),
+(6, 4, '2026-03-24', '00:00:00', 'sakit', 'Demam'),
+(7, 5, '2026-03-24', '07:05:00', 'hadir', ''),
+(8, 1, '2026-03-25', '07:10:00', 'hadir', ''),
+(9, 2, '2026-03-25', '00:00:00', 'izin', 'Acara keluarga'),
+(10, 3, '2026-03-25', '07:00:00', 'hadir', ''),
+(11, 4, '2026-03-25', '07:02:00', 'hadir', ''),
+(12, 5, '2026-03-25', '00:00:00', 'alpha', '');
 
 -- --------------------------------------------------------
 
@@ -54,7 +65,7 @@ CREATE TABLE `guru` (
   `user_id` int(11) DEFAULT NULL,
   `nama_guru` varchar(100) DEFAULT NULL,
   `mapel` varchar(100) DEFAULT NULL,
-  `is_walikelas` tinyint(1) DEFAULT 0
+  `is_walikelas` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -62,7 +73,7 @@ CREATE TABLE `guru` (
 --
 
 INSERT INTO `guru` (`id`, `user_id`, `nama_guru`, `mapel`, `is_walikelas`) VALUES
-(1, 2, 'Gabriel', 'MM', 0);
+(3, 12, 'Gabriel', 'PWPB', '1');
 
 -- --------------------------------------------------------
 
@@ -83,7 +94,12 @@ CREATE TABLE `siswa` (
 --
 
 INSERT INTO `siswa` (`id`, `user_id`, `nis`, `nama_lengkap`, `kelas_jurusan`) VALUES
-(1, 3, '11111', ' Budi', 'XI RPL');
+(1, 3, '11111', ' Budi', 'XI RPL'),
+(2, 4, '11112', 'Ani Wijaya', 'XI RPL'),
+(3, 5, '11113', 'Citra Lestari', 'XI TKJ'),
+(4, 6, '11114', 'Dedi Kurniawan', 'XI TKJ'),
+(5, 7, '11115', 'Eka Saputra', 'XI RPL'),
+(6, 15, '12345', 'Asep', 'X DKV');
 
 -- --------------------------------------------------------
 
@@ -104,8 +120,14 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `password`, `role`) VALUES
 (1, 'admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin'),
-(2, '1122', '$2y$10$gFHqQUSFg3/lvEDNdskfv.0zz.KwFJHuyGftg8vp.oamRNv6Ijtwy', 'guru'),
-(3, '11111', '$2y$10$zV1T6vT9eGyeA.e79S0z6O53OVa1ifNiwrlYiuosTQUUthDWScDQa', 'siswa');
+(3, '11111', '$2y$10$zV1T6vT9eGyeA.e79S0z6O53OVa1ifNiwrlYiuosTQUUthDWScDQa', 'siswa'),
+(4, '11112', '$2y$10$zV1T6vT9eGyeA.e79S0z6O53OVa1ifNiwrlYiuosTQUUthDWScDQa', 'siswa'),
+(5, '11113', '$2y$10$zV1T6vT9eGyeA.e79S0z6O53OVa1ifNiwrlYiuosTQUUthDWScDQa', 'siswa'),
+(6, '11114', '$2y$10$zV1T6vT9eGyeA.e79S0z6O53OVa1ifNiwrlYiuosTQUUthDWScDQa', 'siswa'),
+(7, '11115', '$2y$10$zV1T6vT9eGyeA.e79S0z6O53OVa1ifNiwrlYiuosTQUUthDWScDQa', 'siswa'),
+(9, '00000', '$2y$10$ZbHG0l5GaKbAxI2HIRln6.mReHajRqZSZZucGuxwPij3zWFky39Mi', 'admin'),
+(12, '0990990', '$2y$10$xjqpa7mhp0Po6FExGjoPOeY/Z28DhWOklLcK6cvkAkErKkH3UN58y', 'guru'),
+(15, '12345', '$2y$10$BRNcpZNclS6kMkdEA411fuWPVc4E8J6bhIZi8yjAJtFBSj0UAbqQa', 'siswa');
 
 --
 -- Indexes for dumped tables
@@ -148,25 +170,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `absensi`
 --
 ALTER TABLE `absensi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `guru`
 --
 ALTER TABLE `guru`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `siswa`
 --
 ALTER TABLE `siswa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Constraints for dumped tables

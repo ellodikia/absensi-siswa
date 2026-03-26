@@ -1,0 +1,13 @@
+-- Tambah Users untuk siswa baru (Password: 'password123')
+INSERT INTO `users` (`username`, `password`, `role`) VALUES
+('11112', '$2y$10$zV1T6vT9eGyeA.e79S0z6O53OVa1ifNiwrlYiuosTQUUthDWScDQa', 'siswa'),
+('11113', '$2y$10$zV1T6vT9eGyeA.e79S0z6O53OVa1ifNiwrlYiuosTQUUthDWScDQa', 'siswa'),
+('11114', '$2y$10$zV1T6vT9eGyeA.e79S0z6O53OVa1ifNiwrlYiuosTQUUthDWScDQa', 'siswa'),
+('11115', '$2y$10$zV1T6vT9eGyeA.e79S0z6O53OVa1ifNiwrlYiuosTQUUthDWScDQa', 'siswa');
+
+-- Tambah Data Siswa
+INSERT INTO `siswa` (`user_id`, `nis`, `nama_lengkap`, `kelas_jurusan`) VALUES
+(4, '11112', 'Ani Wijaya', 'XI RPL'),
+(5, '11113', 'Citra Lestari', 'XI TKJ'),
+(6, '11114', 'Dedi Kurniawan', 'XI TKJ'),
+(7, '11115', 'Eka Saputra', 'XI RPL');
