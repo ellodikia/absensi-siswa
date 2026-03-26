@@ -2,7 +2,6 @@
 include '../include/config.php';
 if ($_SESSION['role'] != 'admin') { header("Location: ../login.php"); exit; }
 
-// Logic PHP tetap sama (Simpan, Update, Hapus tidak berubah)
 if (isset($_POST['simpan_guru'])) {
     $nip = escape($_POST['nip']);
     $nama = escape($_POST['nama_guru']);

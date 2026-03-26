@@ -1,16 +1,14 @@
 <?php
 include '../include/config.php';
-// Cek login & role
 if (!isset($_SESSION['id']) || $_SESSION['role'] != 'siswa') { 
     header("Location: ../login.php"); 
     exit; 
 }
 
-$user_id = $_SESSION['id']; // Disamakan dengan index session login
+$user_id = $_SESSION['id']; 
 $query_siswa = mysqli_query($conn, "SELECT * FROM siswa WHERE user_id='$user_id'");
 $siswa = mysqli_fetch_assoc($query_siswa);
 
-// Jika data siswa tidak ditemukan
 if (!$siswa) {
     echo "Data profil siswa tidak ditemukan. Hubungi Admin.";
     exit;

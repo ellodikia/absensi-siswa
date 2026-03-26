@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 26, 2026 at 10:02 AM
+-- Generation Time: Mar 26, 2026 at 11:11 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -41,14 +41,10 @@ CREATE TABLE `absensi` (
 --
 
 INSERT INTO `absensi` (`id`, `siswa_id`, `tanggal`, `jam_masuk`, `status`, `keterangan`) VALUES
-(1, 1, '2026-03-18', '00:00:00', 'izin', ''),
-(2, 1, '2026-03-25', '00:00:00', 'sakit', ''),
-(3, 1, '2026-03-24', '07:00:00', 'hadir', 'Tepat waktu'),
 (4, 2, '2026-03-24', '07:15:00', 'hadir', ''),
 (5, 3, '2026-03-24', '00:00:00', 'alpha', 'Tanpa keterangan'),
 (6, 4, '2026-03-24', '00:00:00', 'sakit', 'Demam'),
 (7, 5, '2026-03-24', '07:05:00', 'hadir', ''),
-(8, 1, '2026-03-25', '07:10:00', 'hadir', ''),
 (9, 2, '2026-03-25', '00:00:00', 'izin', 'Acara keluarga'),
 (10, 3, '2026-03-25', '07:00:00', 'hadir', ''),
 (11, 4, '2026-03-25', '07:02:00', 'hadir', ''),
@@ -94,7 +90,6 @@ CREATE TABLE `siswa` (
 --
 
 INSERT INTO `siswa` (`id`, `user_id`, `nis`, `nama_lengkap`, `kelas_jurusan`) VALUES
-(1, 3, '11111', ' Budi', 'XI RPL'),
 (2, 4, '11112', 'Ani Wijaya', 'XI RPL'),
 (3, 5, '11113', 'Citra Lestari', 'XI TKJ'),
 (4, 6, '11114', 'Dedi Kurniawan', 'XI TKJ'),
@@ -120,7 +115,6 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `password`, `role`) VALUES
 (1, 'admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin'),
-(3, '11111', '$2y$10$zV1T6vT9eGyeA.e79S0z6O53OVa1ifNiwrlYiuosTQUUthDWScDQa', 'siswa'),
 (4, '11112', '$2y$10$zV1T6vT9eGyeA.e79S0z6O53OVa1ifNiwrlYiuosTQUUthDWScDQa', 'siswa'),
 (5, '11113', '$2y$10$zV1T6vT9eGyeA.e79S0z6O53OVa1ifNiwrlYiuosTQUUthDWScDQa', 'siswa'),
 (6, '11114', '$2y$10$zV1T6vT9eGyeA.e79S0z6O53OVa1ifNiwrlYiuosTQUUthDWScDQa', 'siswa'),

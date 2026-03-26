@@ -9,7 +9,6 @@ if (!isset($_SESSION['id']) || $_SESSION['role'] != 'siswa') {
 $user_id = $_SESSION['id'];
 $pesan = "";
 
-// --- PROSES UPDATE PROFIL ---
 if (isset($_POST['update_profil'])) {
     $username_baru = mysqli_real_escape_string($conn, $_POST['username']);
     $nama_lengkap = mysqli_real_escape_string($conn, $_POST['nama_lengkap']);
@@ -18,13 +17,10 @@ if (isset($_POST['update_profil'])) {
 
     $error = false;
 
-    // 1. Update Tabel Siswa
     mysqli_query($conn, "UPDATE siswa SET nama_lengkap = '$nama_lengkap', nis = '$username_baru' WHERE user_id = '$user_id'");
 
-    // 2. Update Tabel Users (Username)
     mysqli_query($conn, "UPDATE users SET username = '$username_baru' WHERE id = '$user_id'");
 
-    // 3. Update Password
     if (!empty($password_baru)) {
         if ($password_baru !== $konfirmasi_password) {
             $pesan = "<div class='bg-rose-100 text-rose-600 p-4 rounded-2xl mb-6 font-bold text-sm border-rose-200'>Password tidak cocok!</div>";
@@ -40,7 +36,6 @@ if (isset($_POST['update_profil'])) {
     }
 }
 
-// Ambil data terbaru
 $query_user = mysqli_query($conn, "SELECT users.username, siswa.* FROM users JOIN siswa ON users.id = siswa.user_id WHERE users.id = '$user_id'");
 $data_siswa = mysqli_fetch_assoc($query_user);
 ?>

@@ -14,6 +14,29 @@ if ($_SESSION['role'] != 'siswa') { header("Location: ../login.php"); exit; }
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://unpkg.com/html5-qrcode"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        #reader__dashboard_section_csr button { 
+            background-color: #4f46e5 !important;
+            color: white !important;
+            padding: 8px 16px !important;
+            border-radius: 12px !important;
+            font-weight: bold !important;
+            text-transform: uppercase !important;
+            font-size: 10px !important;
+            border: none !important;
+            margin: 5px !important;
+        }
+        #reader__camera_selection {
+            padding: 8px !important;
+            border-radius: 12px !important;
+            border: 1px solid #e2e8f0 !important;
+            font-weight: bold !important;
+            font-size: 12px !important;
+            outline: none !important;
+            width: 100% !important;
+            margin-bottom: 10px !important;
+        }
+    </style>
 </head>
 <body class="bg-slate-50 flex">
     <?php include '../include/sidebar.php'; ?>
@@ -23,15 +46,14 @@ if ($_SESSION['role'] != 'siswa') { header("Location: ../login.php"); exit; }
         <main class="p-4 md:p-8 flex flex-col items-center">
             <div class="w-full max-w-lg bg-white p-8 md:p-12 rounded-[2.5rem] shadow-sm border border-slate-100 text-center">
                 <h2 class="text-2xl font-black text-slate-800 mb-2 uppercase tracking-tight">Camera Scan</h2>
-                <p class="text-slate-400 font-medium mb-8 text-sm leading-relaxed px-4">Arahkan camera ke QR Code yang ada di layar.</p>
+                <p class="text-slate-400 font-medium mb-8 text-sm leading-relaxed px-4">Pilih kamera dan arahkan ke QR Code di layar.</p>
 
                 <div id="gps-status" class="mb-8 p-5 bg-amber-50 rounded-2xl text-xs font-black uppercase tracking-widest text-amber-600 border border-amber-100 flex items-center justify-center gap-3">
                     <i class="fas fa-location-arrow animate-bounce"></i> Mendeteksi GPS...
                 </div>
 
-                <div class="relative">
-                    <div id="reader" class="overflow-hidden rounded-[2rem] border-8 border-slate-50 shadow-inner relative z-10 aspect-square"></div>
-                    <div class="absolute inset-0 border-[20px] border-white/20 rounded-[2rem] z-20 pointer-events-none"></div>
+                <div class="relative bg-slate-50 rounded-[2rem] p-2">
+                    <div id="reader" class="overflow-hidden rounded-[1.8rem]"></div>
                 </div>
 
                 <div id="result" class="hidden mt-8 p-5 bg-indigo-50 text-indigo-600 rounded-2xl font-black text-xs uppercase tracking-[0.2em] animate-pulse border border-indigo-100 flex items-center justify-center gap-3">
@@ -61,8 +83,6 @@ if ($_SESSION['role'] != 'siswa') { header("Location: ../login.php"); exit; }
                     },
                     { enableHighAccuracy: true, timeout: 10000 }
                 );
-            } else {
-                Swal.fire('Error', 'Browser Anda tidak mendukung fitur GPS.', 'error');
             }
 
             function onScanSuccess(decodedText) {
@@ -89,32 +109,19 @@ if ($_SESSION['role'] != 'siswa') { header("Location: ../login.php"); exit; }
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('result').classList.add('hidden');
-                    
                     if (data.status === 'success') {
                         Swal.fire({
                             icon: 'success',
                             title: 'Berhasil!',
                             text: data.message,
-                            confirmButtonColor: '#4f46e5',
-                            allowOutsideClick: false
-                        }).then(() => {
-                            window.location.href = 'dashboard.php';
-                        });
-                    } else if (data.status === 'warning') {
-                        Swal.fire({
-                            icon: 'warning',
-                            title: 'Sudah Absen',
-                            text: data.message,
-                            confirmButtonColor: '#f59e0b'
-                        }).then(() => {
-                            window.location.href = 'dashboard.php';
-                        });
+                            confirmButtonColor: '#4f46e5'
+                        }).then(() => { window.location.href = 'dashboard.php'; });
                     } else {
                         Swal.fire({
-                            icon: 'error',
-                            title: 'Gagal',
+                            icon: data.status === 'warning' ? 'warning' : 'error',
+                            title: data.status === 'warning' ? 'Sudah Absen' : 'Gagal',
                             text: data.message,
-                            confirmButtonColor: '#ef4444'
+                            confirmButtonColor: '#4f46e5'
                         }).then(() => {
                             isProcessing = false;
                             html5QrcodeScanner.resume();
@@ -123,14 +130,19 @@ if ($_SESSION['role'] != 'siswa') { header("Location: ../login.php"); exit; }
                 })
                 .catch(error => {
                     document.getElementById('result').classList.add('hidden');
-                    Swal.fire('Error', 'Terjadi kesalahan koneksi ke server.', 'error').then(() => {
+                    Swal.fire('Error', 'Terjadi kesalahan koneksi.', 'error').then(() => {
                         isProcessing = false;
                         html5QrcodeScanner.resume();
                     });
                 });
             }
 
-            let html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: {width: 250, height: 250} });
+            let html5QrcodeScanner = new Html5QrcodeScanner("reader", { 
+                fps: 10, 
+                qrbox: {width: 250, height: 250},
+                rememberLastUsedCamera: true,
+                showTorchButtonIfSupported: true
+            });
             html5QrcodeScanner.render(onScanSuccess);
         </script>
     </div>
